@@ -1,11 +1,6 @@
-.PHONY: build fmt test clean
-
 TARGET := my-project.exe
 
 all: fmt test build
-
-build:
-	go build -ldflags="-w -s" -trimpath -buildvcs=false -o $(TARGET)
 
 fmt:
 	go fmt ./...
@@ -13,5 +8,16 @@ fmt:
 test:
 	go test ./...
 
+build:
+	go build -ldflags="-w -s" -trimpath -buildvcs=false -o $(TARGET)
+
+version:
+	go version -m $(TARGET)
+
+run:
+	$(TARGET)
+
 clean:
-	rm $(TARGET)
+	go clean -i
+
+.PHONY: fmt test build version clean
