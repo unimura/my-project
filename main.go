@@ -2,29 +2,41 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
-type Game struct{}
+const width = 1920
+const height = 1080
 
-func (g *Game) Update() error {
+type App struct{}
+
+func (a *App) Update() error {
 	return nil
 }
 
-func (g *Game) Draw(screen *ebiten.Image) {
+func (a *App) Draw(screen *ebiten.Image) {
 	ebitenutil.DebugPrint(screen, "Hello, World!")
 }
 
-func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 1920, 1080
+func (a *App) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
+	return width, height
 }
 
 func main() {
-	ebiten.SetWindowSize(1920, 1080)
-	ebiten.SetWindowTitle("Hello, World!")
-	if err := ebiten.RunGame(&Game{}); err != nil {
+	file, err := os.OpenFile("out.log", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	log.SetOutput(file)
+
+	log.Println("start app")
+	ebiten.SetWindowSize(width, height)
+	ebiten.SetWindowTitle("my-project")
+	if err := ebiten.RunGame(&App{}); err != nil {
 		log.Fatal(err)
 	}
 }
